@@ -63,6 +63,21 @@ export default function Person() {
             confirmButtonText: "Yes, delete it!"
         }).then( async (result) => {
             if (result.isConfirmed) {
+                let result : any[] | undefined = loader.persons?.filter((obj: any) => {
+                    return obj.id === id
+                })
+                if (result != undefined){
+                    let path = result[0].image
+                    if (path != ""){
+                        console.log(path)
+                        try {
+                            await axios.delete(`${baseUrl}delete-image`, {data: { imageUrl: path }}) 
+                        } catch (err){
+                            console.log(err)
+                        }
+                    }
+                }
+
                 await axios.delete(`${baseUrl}person/${id}`, {headers: {"Authorization" : "Bearer "+ account?.token }})
                 .then(() => {
                     Swal.fire({

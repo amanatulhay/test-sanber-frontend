@@ -74,10 +74,10 @@ const Header = () => {
             <nav>
               <ul className="flex items-center gap-4 2xsm:gap-8 text-black dark:text-white">
                 <li>
-                  <Link to={`/register`}>Register</Link>
+                  <Link to={`/dashboard/register`}>Register</Link>
                 </li>
                 <li>
-                  <Link to={`/login`}>Login</Link>
+                  <Link to={`/dashboard/login`}>Login</Link>
                 </li>
               </ul>
             </nav>

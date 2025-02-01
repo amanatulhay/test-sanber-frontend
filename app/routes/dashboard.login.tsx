@@ -105,7 +105,7 @@ export default function Login() {
 
                             <div className="mt-5 mb-5.5 flex items-center justify-end">
                                 <p className="text-sm text-black hover:underline mr-2">Not registered?</p>
-                                <Link to="/register" className="text-sm text-primary-600 hover:underline mr-5">
+                                <Link to="/dashboard/register" className="text-sm text-primary-600 hover:underline mr-5">
                                     Create an account here
                                 </Link>
                             </div>

@@ -4,6 +4,7 @@ import axios from "axios";
 import { baseUrl } from "../../utils/constants";
 import Swal from "sweetalert2";
 import authStore from "../../stores/auth";
+import { ChangeEvent } from "react";
 
 
 interface FormValues{
@@ -20,13 +21,16 @@ interface PersonFormProps{
 }
 
 const PersonForm = ({formType, formValues}: PersonFormProps)=>{
-    const { register, handleSubmit } = useForm<FormValues>()
+    const { register, handleSubmit, setValue } = useForm<FormValues>()
     const navigate = useNavigate()
     const { account } = authStore()
 
     const onSubmit: SubmitHandler<FormValues> = async (data) => {
         try {    
             if (formValues?.id){
+                if (!data.image){
+                    setValue('image', formValues.image);
+                }
                 await axios.put(`${baseUrl}person/${formValues.id}`,
                     {name: data.name, email: data.email, phone: data.phone, image: data.image},
                     {headers: {"Authorization": `Bearer ${account?.token}`}}
@@ -51,6 +55,41 @@ const PersonForm = ({formType, formValues}: PersonFormProps)=>{
             console.log(err)
         }
         navigate("/dashboard/person")
+    }
+
+    const handleUpload = async (event: ChangeEvent)=>{
+        const form = new FormData();
+        if ((formValues?.image != "")&&(formValues?.image != undefined)){
+            console.log(formValues?.image)
+            try {
+                await axios.delete(`${baseUrl}delete-image`, {data: { imageUrl: formValues?.image }}) 
+            } catch (err){
+                console.log(err)
+            }
+        }
+    
+        const fileInput = event.target as HTMLInputElement;
+        if (fileInput.files && fileInput.files.length > 0) {
+            const file = fileInput.files[0];
+            form.append('file', file);
+            try {
+                let response = await axios.post(`${baseUrl}upload-image`, form)
+                Swal.fire({
+                    title: "SUCCESS",
+                    text: "Successfully upload image Person!",
+                    icon: "success",
+                });
+                console.log(response.data.file)
+                setValue('image', response.data.file);
+            } catch (err){
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "Failed to upload image. Please try again.",
+                });
+                console.log(err)
+            }
+        }
     }
 
     return(
@@ -91,11 +130,13 @@ const PersonForm = ({formType, formValues}: PersonFormProps)=>{
                         <input required  {...register("phone")} defaultValue={formValues?.phone} type="text" name="phone" placeholder="Phone Input" className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-5 py-3 font-normal text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary" />
                     </div>
 
-                    <div>
-                        <label className="mb-3 block text-sm font-medium text-black dark:text-white">
-                        Image
-                        </label>
-                        <input required  {...register("image")} defaultValue={formValues?.image} type="text" name="image" placeholder="Image Input" className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent px-5 py-3 font-normal text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary" />
+                    <label className="mb-3 block text-sm font-medium text-black dark:text-white">
+                        Image 
+                    </label>
+
+                    <div className="w-full rounded-lg border-[1.5px] bg-transparent px-5 py-3 font-normal text-black outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:bg-form-input dark:text-white">
+                        {formValues?.id && <input type="file"  placeholder="Input The Image" onChange={handleUpload} />}
+                        {!formValues?.id && <input required type="file"  placeholder="Input The Image" onChange={handleUpload} />}
                     </div>
 
                     <div className="flex justify-between">

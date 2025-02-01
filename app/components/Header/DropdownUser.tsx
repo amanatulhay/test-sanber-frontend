@@ -6,7 +6,7 @@ const DropdownUser = () => {
 
   const handleLogout = ()=>{
     logout()
-    window.location.href="/login"
+    window.location.href="/dashboard/login"
   }
 
   return (
