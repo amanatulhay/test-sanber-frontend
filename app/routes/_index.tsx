@@ -1,18 +1,19 @@
 import type { LoaderFunction, MetaFunction } from "@remix-run/node";
-import { Await, defer, useAsyncValue, useLoaderData } from "@remix-run/react";
-import axios from "axios";
-import { Suspense } from "react";
+import { Await, defer, useAsyncValue, useLoaderData, useNavigate } from "@remix-run/react";
+import { Suspense, useEffect } from "react";
+import authStore from "../stores/auth";
+import { baseUrl } from "../utils/constants";
 
 export const meta: MetaFunction = () => {
   return [
-    { title: "Iconic Biography" },
+    { title: "Iconic Biodata" },
     { name: "description", content: "Searching through your favorite figure's profile!" },
   ];
 };
 
 export const loader: LoaderFunction = async () => {
   try {
-    const response = await fetch("http://34.101.36.7/person");
+    const response = await fetch(`${baseUrl}person`);
     if (!response.ok){
       throw new Error('Failed to fetch data');
     }
@@ -26,6 +27,15 @@ export const loader: LoaderFunction = async () => {
 
 export default function Index() {
   const loader : { persons : any } = useLoaderData();
+  const { account } = authStore();
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    console.log("Account state:", account);
+    if ((account == undefined) || (account?.username === "")) {
+      navigate('/login');
+    }
+  }, [account, navigate]);
 
   const PersonList = () => {
     const persons: any = useAsyncValue();
@@ -60,15 +70,14 @@ export default function Index() {
 
   return (
     <div className="min-h-screen mt-4 w-full mx-auto max-w-[1440px] relative ">
-    {/* <div className="flex h-screen items-center justify-center"> */}
       <div className="flex flex-col items-center gap-16">
         <header className="flex flex-col items-center gap-9">
           <h1 className="leading text-2xl font-bold text-gray-800 dark:text-gray-100">
-            Welcome to <span className="sr-only">Iconic Biographies</span>
+            Welcome to <span className="sr-only">Iconic Biodata</span>
           </h1>
           <div className="h-[144px] w-[434px] items-center justify-center flex rounded-3xl border border-gray-200 dark:border-gray-700">
             <p className="leading text-3xl text-gray-700 dark:text-gray-200">
-              Iconic Biographies
+              Iconic Biodata
             </p>
           </div>
         </header>
