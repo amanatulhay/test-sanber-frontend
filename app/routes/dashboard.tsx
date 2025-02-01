@@ -1,12 +1,12 @@
 import authStore from "../stores/auth";
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { Outlet } from 'react-router-dom';
 
 export default function Dashboard() {
     const { account } = authStore();
-    const [sidebarOpen, setSidebarOpen] = useState(false);
+    // const [sidebarOpen, setSidebarOpen] = useState(false);
 
     useEffect(() => {
         if (!account) return; // waiting for zustand to be loaded
@@ -17,13 +17,19 @@ export default function Dashboard() {
           {/* <!-- ===== Page Wrapper Start ===== --> */}
           <div className="flex h-screen overflow-hidden">
             {/* <!-- ===== Sidebar Start ===== --> */}
-            {account && <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />}
+
+            {/* {account && <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />} */}
+            {account && <Sidebar />}
+            
             {/* <!-- ===== Sidebar End ===== --> */}
 
             {/* <!-- ===== Content Area Start ===== --> */}
             <div className="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
               {/* <!-- ===== Header Start ===== --> */}
-              <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+
+              {/* <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} /> */}
+              <Header  />
+              
               {/* <!-- ===== Header End ===== --> */}
 
               {/* <!-- ===== Main Content Start ===== --> */}

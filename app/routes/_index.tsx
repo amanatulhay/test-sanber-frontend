@@ -1,7 +1,8 @@
 import type { LoaderFunction, MetaFunction } from "@remix-run/node";
 import { Await, defer, useAsyncValue, useLoaderData, useNavigate } from "@remix-run/react";
-import { Suspense } from "react";
+import { Suspense, useEffect } from "react";
 import { baseUrl } from "../utils/constants";
+import authStore from "~/stores/auth";
 
 export const meta: MetaFunction = () => {
   return [
@@ -26,6 +27,19 @@ export const loader: LoaderFunction = async () => {
 
 export default function Index() {
   const loader : { persons : any } = useLoaderData();
+  const { account } = authStore();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      console.log(account);  
+      if ((!account) || (account === null)) {
+        navigate("/login");
+      }
+    }, 100);
+  
+    return () => clearTimeout(timer);
+  }, [account, navigate]);
 
   const PersonList = () => {
     const persons: any = useAsyncValue();
