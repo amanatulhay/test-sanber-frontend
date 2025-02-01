@@ -28,12 +28,13 @@ export default function Login() {
             console.log(res)
             let {access_token: token} = res.data
             login({token, username: data.username})
+            
+            window.location.href = "/";
             Swal.fire({
                 title: "SUCCESS",
                 text: "Successfully login!",
                 icon: "success",
             });
-            navigate("/")
         } catch (err){
             if (axios.isAxiosError(err)) {
                 console.log('Error:', err.response?.data.message);

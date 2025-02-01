@@ -9,10 +9,9 @@ interface ErrorMessage{
 
 const ErrorPage = ({message}: ErrorMessage)=>{
     const { account } = authStore();
-    // const [sidebarOpen, setSidebarOpen] = useState(false);
 
     useEffect(() => {
-        if (!account) return; // waiting for zustand to be loaded
+        if (!account) return;
     }, [account]);
 
     return (
@@ -20,14 +19,12 @@ const ErrorPage = ({message}: ErrorMessage)=>{
           {/* <!-- ===== Page Wrapper Start ===== --> */}
           <div className="flex h-screen overflow-hidden">
             {/* <!-- ===== Sidebar Start ===== --> */}
-            {/* {account && <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />} */}
             {account && <Sidebar />}
             {/* <!-- ===== Sidebar End ===== --> */}
 
             {/* <!-- ===== Content Area Start ===== --> */}
             <div className="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
               {/* <!-- ===== Header Start ===== --> */}
-              {/* <Header sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} /> */}
               <Header />
               {/* <!-- ===== Header End ===== --> */}
 
