@@ -5,6 +5,10 @@ import { baseUrl } from "../utils/constants";
 import Swal from "sweetalert2";
 import axios from "axios";
 import authStore from "~/stores/auth";
+import { FaPerson } from "react-icons/fa6";
+import { FaPen } from "react-icons/fa";
+import { FaRegTrashAlt } from "react-icons/fa";
+import { IoEyeSharp } from "react-icons/io5";
 
 export const meta: MetaFunction = () => {
     return [
@@ -36,7 +40,19 @@ export default function Person() {
         navigate('/dashboard/person/' + id + '/edit');
     };
 
-    const handleHapus = async (id: number) => {
+    const handleHobby = async (person_id: number) => {
+        navigate('/dashboard/hobby/' + person_id );
+    };
+
+    const handleFave = async (person_id: number) => {
+        navigate('/dashboard/favechar/' + person_id );
+    };
+
+    const handlePost = async () => {
+        navigate('/dashboard/person/create');
+    };
+
+    const handleDelete = async (id: number) => {
         Swal.fire({
             title: "Are you sure?",
             text: "Apa kamu yakin akan menghapus product ini!",
@@ -116,10 +132,18 @@ export default function Person() {
                             <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm text-center">
                                 <div className="flex justify-center space-x-1">
                                     <button type="button" className='bg-yellow-400 text-white rounded-lg text-xs text-sm w-full sm:w-auto px-5 py-2.5 text-center hover:bg-yellow-500' onClick={() => handleEdit(item.id) }>
-                                        {/* <Icon name="edit-2" className="inline-block text-xs"  /> */}Edit
+                                        <FaPen className="inline-block text-xs"  />
                                     </button>
-                                    <button type="button" className='bg-red-500 text-white rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center hover:bg-red-600' onClick={() => handleHapus(item.id) } >
-                                        {/* <Icon name="trash" className="inline-block text-xs"  /> */}Delete
+                                    <button type="button" className='bg-red-500 text-white rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center hover:bg-red-600' onClick={() => handleDelete(item.id) } >
+                                        <FaRegTrashAlt className="inline-block text-xs"  />
+                                    </button>
+                                    <button type="button" className='bg-green-500 text-white rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center hover:bg-green-600' onClick={() => handleHobby(item.id) } >
+                                        <IoEyeSharp className="inline-block text-xs mr-1"  />
+                                        Hobby
+                                    </button>
+                                    <button type="button" className='bg-blue-500 text-white rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center hover:bg-blue-600' onClick={() => handleFave(item.id) } >
+                                        <IoEyeSharp className="inline-block text-xs mr-1"  />
+                                        Fave Chars
                                     </button>
                                 </div>
                             </td>
@@ -134,8 +158,15 @@ export default function Person() {
     };
 
     return (
-        <>
-            <h1 className="text-black">Person List</h1>
+        <>            
+            <h1 className="text-2xl my-2 font-bold"> <FaPerson className="inline-block mr-1 mb-2"/> Data Person</h1>
+            <hr />
+            <button onClick={()=>{
+                        handlePost()
+                        }}
+                className="my-8 text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+                Post New Person
+            </button>
             <Suspense fallback={<h2>Please Wait...</h2>}>
             <Await resolve={loader.persons}>
                 <PersonList />

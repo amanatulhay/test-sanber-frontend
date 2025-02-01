@@ -58,9 +58,11 @@ const Header = () => {
         <div className="hidden sm:block">
           <form action="https://formbold.com/s/unique_form_id" method="POST">
             <div className="relative">
-              <div className="text-black dark:text-white text-xl">
+              {/* <div className="text-black dark:text-white text-xl">
                 ICONIC PROFILES
-              </div>
+              </div> */}
+              
+              <h1 className="text-3xl my-2 text-black font-bold"> ICONIC PROFILES</h1>
             </div>
           </form>
         </div>
