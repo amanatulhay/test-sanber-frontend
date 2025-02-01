@@ -1,12 +1,11 @@
 import type { LoaderFunction, MetaFunction } from "@remix-run/node";
 import { Await, defer, useAsyncValue, useLoaderData, useNavigate } from "@remix-run/react";
-import { Suspense, useEffect } from "react";
-import authStore from "../stores/auth";
+import { Suspense } from "react";
 import { baseUrl } from "../utils/constants";
 
 export const meta: MetaFunction = () => {
   return [
-    { title: "Iconic Biodata" },
+    { title: "Iconic Profiles" },
     { name: "description", content: "Searching through your favorite figure's profile!" },
   ];
 };
@@ -27,15 +26,6 @@ export const loader: LoaderFunction = async () => {
 
 export default function Index() {
   const loader : { persons : any } = useLoaderData();
-  const { account } = authStore();
-  const navigate = useNavigate()
-
-  useEffect(() => {
-    console.log("Account state:", account);
-    if ((account == undefined) || (account?.username === "")) {
-      navigate('/login');
-    }
-  }, [account, navigate]);
 
   const PersonList = () => {
     const persons: any = useAsyncValue();
@@ -73,11 +63,11 @@ export default function Index() {
       <div className="flex flex-col items-center gap-16">
         <header className="flex flex-col items-center gap-9">
           <h1 className="leading text-2xl font-bold text-gray-800 dark:text-gray-100">
-            Welcome to <span className="sr-only">Iconic Biodata</span>
+            Welcome to <span className="sr-only">Iconic Profiles</span>
           </h1>
           <div className="h-[144px] w-[434px] items-center justify-center flex rounded-3xl border border-gray-200 dark:border-gray-700">
             <p className="leading text-3xl text-gray-700 dark:text-gray-200">
-              Iconic Biodata
+              Iconic Profiles
             </p>
           </div>
         </header>
