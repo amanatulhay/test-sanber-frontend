@@ -45,7 +45,7 @@ export default function Person() {
     };
 
     const handleFave = async (person_id: number) => {
-        navigate('/dashboard/favechar/' + person_id );
+        navigate('/dashboard/person/' + person_id + '/favechar' );
     };
 
     const handlePost = async () => {
