@@ -62,7 +62,7 @@ const Header = () => {
                 ICONIC PROFILES
               </div> */}
               
-              <h1 className="text-3xl my-2 text-black font-bold"> ICONIC PROFILES</h1>
+              <h1 onClick={() => window.location.href = '/'} className="text-3xl my-2 text-black font-bold"> ICONIC PROFILES</h1>
             </div>
           </form>
         </div>

@@ -20,7 +20,7 @@ export default function Index() {
     const timer = setTimeout(() => {
       console.log(account);  
       if ((!account) || (account === null)) {
-        navigate("/dashboard/login");
+        navigate("/dashboard/register");
       }
     }, 100);
   
