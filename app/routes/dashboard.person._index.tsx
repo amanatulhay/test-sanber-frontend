@@ -41,7 +41,7 @@ export default function Person() {
     };
 
     const handleHobby = async (person_id: number) => {
-        navigate('/dashboard/hobby/' + person_id );
+        navigate('/dashboard/person/' + person_id + '/hobby' );
     };
 
     const handleFave = async (person_id: number) => {
@@ -53,52 +53,48 @@ export default function Person() {
     };
 
     const handleDelete = async (id: number) => {
-        Swal.fire({
+        const result = await Swal.fire({
             title: "Are you sure?",
-            text: "Apa kamu yakin akan menghapus product ini!",
+            text: "Are you sure you want to delete this person?",
             icon: "warning",
             showCancelButton: true,
             confirmButtonColor: "#3085d6",
             cancelButtonColor: "#d33",
             confirmButtonText: "Yes, delete it!"
-        }).then( async (result) => {
-            if (result.isConfirmed) {
-                let result : any[] | undefined = loader.persons?.filter((obj: any) => {
-                    return obj.id === id
-                })
-                if (result != undefined){
-                    let path = result[0].image
-                    if (path != ""){
-                        console.log(path)
-                        try {
-                            await axios.delete(`${baseUrl}delete-image`, {data: { imageUrl: path }}) 
-                        } catch (err){
-                            console.log(err)
-                        }
+        });
+
+        if (result.isConfirmed) {
+            try {
+                const personToDelete = loader.persons?.find((obj: any) => obj.id === id);
+
+                await axios.delete(`${baseUrl}person/${id}`, {
+                    headers: { "Authorization": "Bearer " + account?.token }
+                });
+                Swal.fire({
+                    title: 'Success!',
+                    text: `Successfully deleted person!`,
+                    icon: 'success',
+                });
+
+                if (personToDelete?.image) {
+                    try {
+                        await axios.delete(`${baseUrl}delete-image`, { data: { imageUrl: personToDelete.image } });
+                    } catch (err) {
+                        console.log('Error deleting image:', err);
                     }
                 }
-
-                await axios.delete(`${baseUrl}person/${id}`, {headers: {"Authorization" : "Bearer "+ account?.token }})
-                .then(() => {
-                    Swal.fire({
-                        title: 'Success!',
-                        text: `Berhasil Delete product!`,
-                        icon: 'success',
-                    }).then(() => {
-                        navigate("/dashboard/person") 
-                    });
-                }).catch((e) => {
-                    let response = e.response;
-                    Swal.fire({
-                        icon: "error",
-                        title: "Oops...",
-                        text: "Failed to delete product. Please make sure to delete the review/transaction of this product first!",
-                    });
-                    console.log(response)
-                })
-            } 
-            navigate("/dashboard/person")           
-        });
+            } catch (error) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: "Failed to delete person. Please make sure to delete the hobby & fave chars of this person first!",
+                });
+                console.error(error);
+            }
+            navigate("/dashboard/person");
+        } else {
+            navigate("/dashboard/person");
+        }
     };
 
     const PersonList = () => {
